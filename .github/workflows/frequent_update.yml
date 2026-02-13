@@ -26,6 +26,6 @@ jobs:
 
       - name: Run script
         env:
-          MY_TOKEN: ${{ secrets.wlcnonkey }}
+          MY_TOKEN: ${{ secrets.WLCNONKEY }}
         run: |
           cd source && python main.py
