@@ -101,9 +101,7 @@ URLS = [
 EXTRA_URLS_FOR_26 = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-SNI-RU-all.txt",
-    "https://raw.githubusercontent.com/zieng2/wl/main/vless.txt",
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
-    "https://raw.githubusercontent.com/zieng2/wl/main/vless_lite.txt",
     "https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/2",
     "https://raw.githubusercontent.com/gbwltg/gbwl/refs/heads/main/m2EsPqwmlc",
     "https://bp.wl.free.nf/confs/wl.txt",
@@ -805,14 +803,7 @@ def create_filtered_configs():
         return filtered_lines
 
     all_configs = []
-
-    # 2. Обработка файлов 1-25
-    max_workers = min(16, os.cpu_count() + 4)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(_process_file_filtering, i) for i in range(1, 26)]
-        for future in concurrent.futures.as_completed(futures):
-            all_configs.extend(future.result())
-
+    
     # 3. Загрузка доп. источников для 26-го файла + ПОДСЧЕТ УДАЛЕННЫХ
     def _load_extra_configs(url):
         count_removed = 0
