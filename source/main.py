@@ -864,7 +864,7 @@ def create_filtered_configs():
     local_path_26 = "githubmirror/26.txt"
     try:
         with open(local_path_26, "w", encoding="utf-8") as file:
-            file.write("\n".join(unique_configs))
+            file.write("#profile-title: RunDunDun Configs\n" + "#announce: Нажимаешь и рундундун делает" + "\n".join(unique_configs))
         log(f"📁 Создан файл {local_path_26} с {len(unique_configs)} конфигами")
     except Exception as e:
         log(f"⚠️ Ошибка при сохранении {local_path_26}: {e}")
