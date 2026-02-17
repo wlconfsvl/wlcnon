@@ -1,7 +1,12 @@
 #profile-title: RunDunDun Configs
 #announce: Нажимаешь и рундундун делает
+Активных: 563
+1. Для проверки нажмите на спидометр
+2. Ждите 1-2 минуты и можете останавливать
+3. Если один не работает, выбирайте другой
 
-#profile-update-interval: 2
+
+#profile-update-interval: 1
 
 vless://f3c95705-8a7b-4566-9086-d19c2f34b675@91.196.35.96:8080/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=help.max.ru&fp=chrome&security=reality&pbk=qGXclTFIbiEJ6sxs5N0V9p91cSdQHElwNxTMS07dM2A&sid=f1#%F0%9F%87%A6%F0%9F%87%B2%20Armenia%20%5BSNI-RU%5D%20help.max.ru
 vless://b39aca97-e9f2-4a94-b87f-8748299846cd@81.denditop.site:443?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&fp=chrome&pbk=_clqzJ8ZkSG71dSLu5KfRB9NJf63uBbdlDFZ4hp1uBE&sid=3d9bfa9202efd228&sni=m.vk.ru#%F0%9F%87%A6%F0%9F%87%B9%20Austria%20%5BSNI-RU%5D%20m.vk.ru
