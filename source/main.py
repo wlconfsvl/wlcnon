@@ -544,56 +544,39 @@ def filter_insecure_configs(local_path, data, log_enabled=True):
     return "\n".join(result), filtered_count
 
 def load_cidr_whitelist(url):
-    """Загружает список CIDR и оптимизирует его для быстрой проверки"""
-    log(f"🌐 Загрузка CIDR белого списка: {url}")
+    """Загружает список CIDR и оптимизирует его"""
     try:
         data = fetch_data(url, timeout=15)
-        if not data:
-            return []
-        
-        # Очищаем строки и создаем объекты сетей
+        if not data: return []
         raw_networks = []
         for line in data.splitlines():
             line = line.strip()
-            if not line or line.startswith('#'):
-                continue
+            if not line or line.startswith('#'): continue
             try:
                 raw_networks.append(ipaddress.ip_network(line))
-            except ValueError:
-                continue
-        
-        # Оптимизация: объединяем смежные диапазоны (из 23к может стать меньше)
+            except ValueError: continue
         optimized = list(ipaddress.collapse_addresses(raw_networks))
-        log(f"✅ Загружено {len(optimized)} оптимизированных CIDR диапазонов")
+        log(f"✅ Загружено {len(optimized)} CIDR диапазонов")
         return optimized
     except Exception as e:
-        log(f"❌ Ошибка при подготовке CIDR: {e}")
+        log(f"❌ Ошибка CIDR: {e}")
         return []
 
 def is_ip_whitelisted(address, networks):
-    """Проверяет, входит ли адрес (IP или домен) в список разрешенных CIDR"""
-    if not networks:
-        return False
-    
-    ip_to_check = None
-    
-    # 1. Проверяем, является ли адрес уже IP-адресом
+    """Проверка IP/Домена по CIDR"""
+    if not networks or not address: return False
     try:
-        ip_to_check = ipaddress.ip_address(address)
-    except ValueError:
-        # 2. Если это домен, пробуем резолвить (с коротким таймаутом)
+        # Пытаемся понять, это IP или домен
         try:
-            # Используем getaddrinfo для поддержки IPv4
-            # Таймаут здесь системный, обычно 1-2 сек
-            ip_to_check = ipaddress.ip_address(socket.gethostbyname(address))
-        except (socket.gaierror, socket.timeout):
-            return False
-
-    # 3. Проверка вхождения в диапазоны
-    if ip_to_check:
+            ip_obj = ipaddress.ip_address(address)
+        except ValueError:
+            # Если домен - резолвим
+            ip_obj = ipaddress.ip_address(socket.gethostbyname(address))
+        
         for net in networks:
-            if ip_to_check in net:
-                return True
+            if ip_obj in net: return True
+    except:
+        pass
     return False
 
 def create_filtered_configs():
@@ -797,92 +780,88 @@ def create_filtered_configs():
         "zen.yandex.ru", "честныйзнак.рф"
     ]
 
+    # Оптимизация SNI
     sorted_domains = sorted(sni_domains, key=len)
     optimized_domains = []
     for d in sorted_domains:
-        is_redundant = False
-        for existing in optimized_domains:
-            if existing in d:
-                is_redundant = True
-                break
-        if not is_redundant:
+        if not any(existing in d for existing in optimized_domains):
             optimized_domains.append(d)
 
     try:
-        pattern_str = r"(?:" + "|".join(re.escape(d) for d in optimized_domains) + r")"
-        sni_regex = re.compile(pattern_str)
+        sni_regex = re.compile(r"(?:" + "|".join(re.escape(d) for d in optimized_domains) + r")")
     except Exception as e:
-        log(f"❌ Ошибка компиляции Regex: {e}")
+        log(f"❌ Регулярка SNI ошибка: {e}")
         return None
 
-    # --- Блок подготовки CIDR ---
+    # 2. Загрузка CIDR
     cidr_url = "https://github.com/hxehex/russia-mobile-internet-whitelist/raw/refs/heads/main/cidrwhitelist.txt"
     cidr_networks = load_cidr_whitelist(cidr_url)
 
-    # Вспомогательная функция для парсинга хоста
-    def _extract_host_only(line: str):
+    # --- Вложенные функции-помощники (теперь они точно на месте) ---
+    def _extract_host_port(line: str):
+        if not line: return None
         if line.startswith("vmess://"):
             try:
                 payload = line[8:]
                 rem = len(payload) % 4
                 if rem: payload += '=' * (4 - rem)
                 decoded = json.loads(base64.b64decode(payload).decode('utf-8', errors='ignore'))
-                return decoded.get('add') or decoded.get('host')
-            except: return None
-        # Для vless/trojan/ss: находим часть между @ и :
-        m = re.search(r'@([\w\.-]+):', line)
-        if m: return m.group(1)
+                host = decoded.get('add') or decoded.get('host')
+                port = decoded.get('port')
+                if host and port: return str(host), str(port)
+            except: pass
+            return None
+        m = re.search(r'(?:@|//)([\w\.-]+):(\d{1,5})', line)
+        if m: return m.group(1), m.group(2)
         return None
 
-    # 3. Загрузка исходных конфигов
-    all_raw_configs = []
-    
-    def _load_and_filter_logic(url):
+    def _extract_host_only(line: str):
+        hp = _extract_host_port(line)
+        return hp[0] if hp else None
+
+    # 3. Загрузка и первичная фильтрация небезопасных
+    def _load_extra_configs(url):
         configs = []
         try:
             data = fetch_data(url, timeout=EXTRA_URL_TIMEOUT, max_attempts=EXTRA_URL_MAX_ATTEMPTS)
-            data, _ = filter_insecure_configs("temp_26", data, log_enabled=False)
+            # Фильтруем небезопасные (tls=none и т.д.) через вашу внешнюю функцию
+            data, _ = filter_insecure_configs("githubmirror/26.txt", data, log_enabled=False)
             data = re.sub(r'(vmess|vless|trojan|ss|ssr|tuic|hysteria|hysteria2)://', r'\n\1://', data)
-            lines = data.splitlines()
-            for line in lines:
+            for line in data.splitlines():
                 line = line.strip()
                 if line and not line.startswith('#'):
                     configs.append(line)
         except Exception as e:
-            log(f"⚠️ Ошибка {url}: {e}")
+            log(f"⚠️ Ошибка загрузки {url}: {e}")
         return configs
 
-    # Собираем все конфиги из EXTRA_URLS_FOR_26
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        futures = [executor.submit(_load_and_filter_logic, url) for url in EXTRA_URLS_FOR_26]
-        for future in concurrent.futures.as_completed(futures):
-            all_raw_configs.extend(future.result())
+    all_raw_configs = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        futures = [executor.submit(_load_extra_configs, url) for url in EXTRA_URLS_FOR_26]
+        for f in concurrent.futures.as_completed(futures):
+            all_raw_configs.extend(f.result())
 
-    # --- ОСНОВНАЯ ФИЛЬТРАЦИЯ ---
+    # 4. Фильтрация по SNI + CIDR + Дедупликация
     unique_configs = []
     seen_hostport = set()
-    
     count_sni = 0
     count_cidr = 0
 
     for cfg in all_raw_configs:
-        # Пропускаем дубликаты сразу
-        host_port = _extract_host_port(cfg) # Используем вашу существующую функцию
-        if not host_port: continue
-        key = f"{host_port[0].lower()}:{host_port[1]}"
+        hp = _extract_host_port(cfg)
+        if not hp: continue
+        
+        key = f"{hp[0].lower()}:{hp[1]}"
         if key in seen_hostport: continue
         
         is_ok = False
-        
-        # 1. Сначала проверяем SNI (быстро, без сети)
+        # Сначала SNI
         if sni_regex.search(cfg):
             is_ok = True
             count_sni += 1
-        
-        # 2. Если по SNI не прошел, проверяем по CIDR (может потребоваться DNS)
-        if not is_ok and cidr_networks:
-            host = _extract_host_only(cfg)
-            if host and is_ip_whitelisted(host, cidr_networks):
+        # Если не SNI, то CIDR
+        elif cidr_networks:
+            if is_ip_whitelisted(hp[0], cidr_networks):
                 is_ok = True
                 count_cidr += 1
         
@@ -890,17 +869,16 @@ def create_filtered_configs():
             seen_hostport.add(key)
             unique_configs.append(cfg)
 
-    log(f"📊 Результаты фильтрации: SNI: {count_sni}, CIDR: {count_cidr}")
+    log(f"ℹ️ Итог 26.txt: SNI={count_sni}, CIDR={count_cidr}. Всего: {len(unique_configs)}")
 
-    # Сохранение (ваш исходный блок)
+    # 5. Сохранение
     local_path_26 = "githubmirror/26.txt"
     try:
-        header = "#profile-title: RunDunDun Filtered\n#profile-update-interval: 1\n\n"
         with open(local_path_26, "w", encoding="utf-8") as file:
+            header = "#profile-title: RunDunDun Configs\n#profile-update-interval: 1\n\n"
             file.write(header + "\n".join(unique_configs))
-        log(f"📁 Файл 26.txt обновлен: {len(unique_configs)} конфигов")
     except Exception as e:
-        log(f"⚠️ Ошибка сохранения: {e}")
+        log(f"⚠️ Ошибка сохранения 26.txt: {e}")
 
     return local_path_26
 
