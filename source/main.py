@@ -875,8 +875,7 @@ def create_filtered_configs():
     local_path_26 = "githubmirror/26.txt"
     try:
         with open(local_path_26, "w", encoding="utf-8") as file:
-            header = "#profile-title: RunDunDun Configs\n#profile-update-interval: 1\n\n"
-            file.write(header + "\n".join(unique_configs))
+            file.write("#profile-title: RunDunDun Configs\n" + f"#announce: base64: 0J3QsNC20LjQvNCw0LXRiNGMINC4INGA0YPQvdC00YPQvdC00YPQvSDQtNC10LvQsNC10YIKMS4g0JTQu9GPINC/0YDQvtCy0LXRgNC60Lgg0L3QsNC20LzQuNGC0LUg0L3QsCDRgdC/0LjQtNC+0LzQtdGC0YAKMi4g0JbQtNC40YLQtSAxLTIg0LzQuNC90YPRgtGLINC4INC80L7QttC10YLQtSDQvtGB0YLQsNC90LDQstC70LjQstCw0YLRjAozLiDQldGB0LvQuCDQvtC00LjQvSDQvdC1INGA0LDQsdC+0YLQsNC10YIsINCy0YvQsdC40YDQsNC50YLQtSDQtNGA0YPQs9C+0LkK\n\n" + "#profile-update-interval: 1\n\n" + "\n".join(unique_configs))
     except Exception as e:
         log(f"⚠️ Ошибка сохранения 26.txt: {e}")
 
