@@ -15,6 +15,7 @@ import html
 import json
 import re
 import os
+import ipaddress
 
 # -------------------- ЛОГИРОВАНИЕ --------------------
 LOGS_BY_FILE: dict[int, list[str]] = defaultdict(list)
@@ -742,7 +743,7 @@ def create_filtered_configs():
         "zen.yandex.ru", "честныйзнак.рф"
     ]
 
-    # 1. Оптимизация списка доменов
+# 1. Оптимизация списка доменов
     sorted_domains = sorted(sni_domains, key=len)
     optimized_domains = []
     for d in sorted_domains:
@@ -760,6 +761,43 @@ def create_filtered_configs():
     except Exception as e:
         log(f"❌ Ошибка компиляции Regex: {e}")
         return None
+
+    # --- НОВЫЙ БЛОК: Загрузка и оптимизация CIDR (23000+ диапазонов) ---
+    cidr_url = "https://github.com/hxehex/russia-mobile-internet-whitelist/raw/refs/heads/main/cidrwhitelist.txt"
+    cidrs = []
+    try:
+        raw_c = fetch_data(cidr_url, timeout=15)
+        if raw_c:
+            _nets = []
+            for n in raw_c.splitlines():
+                n = n.strip()
+                if n and '/' in n:
+                    try: _nets.append(ipaddress.ip_network(n))
+                    except: continue
+            # Схлопываем сети для ускорения перебора
+            cidrs = list(ipaddress.collapse_addresses(_nets))
+            log(f"✅ Загружено и оптимизировано {len(cidrs)} CIDR")
+    except Exception as e:
+        log(f"⚠️ Ошибка загрузки CIDR: {e}")
+
+    # Вспомогательная функция для ДВОЙНОЙ проверки (SNI + CIDR)
+    def _is_valid_config(line: str):
+        # 1. Сначала проверяем SNI (должен присутствовать)
+        if not sni_regex.search(line):
+            return False
+        
+        # 2. Затем проверяем хост по CIDR (должен быть в списке)
+        hp = _extract_host_port(line)
+        if hp and cidrs:
+            try:
+                ip_obj = ipaddress.ip_address(hp[0])
+                # Проверяем вхождение IP в разрешенные подсети
+                for net in cidrs:
+                    if ip_obj in net:
+                        return True
+            except:
+                pass # Если хост - домен, он не пройдет проверку IP
+        return False
 
     # Вспомогательные функции внутри
     def _extract_host_port(line: str):
@@ -794,7 +832,8 @@ def create_filtered_configs():
             for line in lines:
                 line = line.strip()
                 if not line: continue
-                if sni_regex.search(line):
+                # ПРИМЕНЯЕМ ДВОЙНУЮ ФИЛЬТРАЦИЮ
+                if _is_valid_config(line):
                     filtered_lines.append(line)
         except Exception:
             pass
@@ -813,7 +852,6 @@ def create_filtered_configs():
                 max_attempts=EXTRA_URL_MAX_ATTEMPTS,
                 allow_http_downgrade=False,
             )
-            # Вызываем с log_enabled=False, но забираем count
             data, count = filter_insecure_configs("githubmirror/26.txt", data, log_enabled=False)
             count_removed = count
             
@@ -821,55 +859,13 @@ def create_filtered_configs():
             lines = data.splitlines()
             for line in lines:
                 line = line.strip()
-                if line and not line.startswith('#'):
+                # ПРИМЕНЯЕМ ДВОЙНУЮ ФИЛЬТРАЦИЮ
+                if line and not line.startswith('#') and _is_valid_config(line):
                     configs.append(line)
         except Exception as e:
             log(f"⚠️ Ошибка при загрузке {url}: {_format_fetch_error(e)}")
         
-        # Возвращаем конфиги и количество удаленных
         return configs, count_removed
-    
-    extra_configs = []
-    total_insecure_filtered_26 = 0 # Счетчик для 26-го файла
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=min(4, len(EXTRA_URLS_FOR_26))) as executor:
-        futures = [executor.submit(_load_extra_configs, url) for url in EXTRA_URLS_FOR_26]
-        for future in concurrent.futures.as_completed(futures):
-            res_configs, res_count = future.result()
-            extra_configs.extend(res_configs)
-            total_insecure_filtered_26 += res_count # Суммируем
-    
-    # ЕДИНСТВЕННЫЙ ЛОГ ДЛЯ 26-го ФАЙЛА
-    if total_insecure_filtered_26 > 0:
-        log(f"ℹ️  Отфильтровано {total_insecure_filtered_26} небезопасных конфигов для githubmirror/26.txt")
-
-    all_configs.extend(extra_configs)
-
-    # Дедупликация
-    seen_full = set()
-    seen_hostport = set()
-    unique_configs = []
-
-    for cfg in all_configs:
-        c = cfg.strip()
-        if not c or c in seen_full: continue
-        seen_full.add(c)
-        hostport = _extract_host_port(c)
-        if hostport:
-            key = f"{hostport[0].lower()}:{hostport[1]}"
-            if key in seen_hostport: continue
-            seen_hostport.add(key)
-        unique_configs.append(c)
-
-    local_path_26 = "githubmirror/26.txt"
-    try:
-        with open(local_path_26, "w", encoding="utf-8") as file:
-            file.write("#profile-title: RunDunDun Configs\n" + f"#announce: base64: 0J3QsNC20LjQvNCw0LXRiNGMINC4INGA0YPQvdC00YPQvdC00YPQvSDQtNC10LvQsNC10YIKMS4g0JTQu9GPINC/0YDQvtCy0LXRgNC60Lgg0L3QsNC20LzQuNGC0LUg0L3QsCDRgdC/0LjQtNC+0LzQtdGC0YAKMi4g0JbQtNC40YLQtSAxLTIg0LzQuNC90YPRgtGLINC4INC80L7QttC10YLQtSDQvtGB0YLQsNC90LDQstC70LjQstCw0YLRjAozLiDQldGB0LvQuCDQvtC00LjQvSDQvdC1INGA0LDQsdC+0YLQsNC10YIsINCy0YvQsdC40YDQsNC50YLQtSDQtNGA0YPQs9C+0LkK\n\n" + "#profile-update-interval: 1\n\n" + "\n".join(unique_configs))
-        log(f"📁 Создан файл {local_path_26} с {len(unique_configs)} конфигами")
-    except Exception as e:
-        log(f"⚠️ Ошибка при сохранении {local_path_26}: {e}")
-
-    return local_path_26
 
 def main(dry_run: bool = False):
     max_workers_download = min(DEFAULT_MAX_WORKERS, max(1, len(URLS)))
