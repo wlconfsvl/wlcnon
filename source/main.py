@@ -16,6 +16,7 @@ import json
 import re
 import os
 import ipaddress
+import socks
 
 # -------------------- ЛОГИРОВАНИЕ --------------------
 LOGS_BY_FILE: dict[int, list[str]] = defaultdict(list)
