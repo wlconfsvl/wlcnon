@@ -907,7 +907,7 @@ def main(dry_run: bool = False):
     local_path_26 = create_filtered_configs()
     
     # Загружаем 26-й файл в GitHub
-    if not dry_run:
+    if local_path_26 and not dry_run:
         upload_to_github(local_path_26, "githubmirror/26.txt")
 
     # Обновляем таблицы в README.md после всех загрузок
