@@ -104,6 +104,7 @@ EXTRA_URLS_FOR_26 = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-SNI-RU-all.txt",
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
+    os.environ.get("CONFIGSWORKING"),
  #   "https://bp.wl.free.nf/confs/wl.txt",
  #   "https://storage.yandexcloud.net/cid-vpn/whitelist.txt"
 ]
@@ -829,8 +830,12 @@ def create_filtered_configs():
             data = re.sub(r'(vmess|vless|trojan|ss|ssr|tuic|hysteria|hysteria2)://', r'\n\1://', data)
             for line in data.splitlines():
                 line = line.strip()
-                if line and not line.startswith('#'):
-                    configs.append(line)
+                if not line or line.startswith('#'):
+                    continue
+                line = re.sub(r'#%5B[^%]+%5D', '#%5BRunDun%5D', line)
+
+                configs.append(line)
+                    
         except Exception as e:
             log(f"⚠️ Ошибка загрузки {url}: {e}")
         return configs
