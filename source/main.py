@@ -554,6 +554,7 @@ def load_cidr_whitelist(url):
         data = fetch_data(url, timeout=15)
         if not data: return []
         raw_networks = []
+        raw_networks.extend([ipaddress.ip_network(ip) for ip in ["51.250.0.0/17", "89.208.87.179/32", "95.163.211.0/23", "212.233.94.0/23", "37.139.33.0/24", "84.23.53.0/24", "178.154.222.55/32"]])
         for line in data.splitlines():
             line = line.strip()
             if not line or line.startswith('#'): continue
