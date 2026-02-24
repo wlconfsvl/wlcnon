@@ -27,5 +27,6 @@ jobs:
       - name: Run script
         env:
           MY_TOKEN: ${{ secrets.WLCNONKEY }}
+          CONFIGSWORKING: ${{ secrets.CONFIGSWORKING }}
         run: |
           cd source && python main.py
