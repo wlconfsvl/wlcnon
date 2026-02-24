@@ -100,14 +100,18 @@ URLS = [
 ]
 
 # Источники для 26-го файла (без SNI проверки, только дедупликация)
+# Получаем ссылку из переменной, если она есть
+secret_url = os.environ.get("CONFIGSWORKING")
+
 EXTRA_URLS_FOR_26 = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-SNI-RU-all.txt",
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
-    os.environ.get("CONFIGSWORKING"),
- #   "https://bp.wl.free.nf/confs/wl.txt",
- #   "https://storage.yandexcloud.net/cid-vpn/whitelist.txt"
 ]
+
+# Добавляем ссылку только если она существует (не None и не пустая строка)
+if secret_url:
+    EXTRA_URLS_FOR_26.append(secret_url)
 
 # Best-effort fetch tuning for optional sources (26-й файл)
 EXTRA_URL_TIMEOUT = int(os.environ.get("EXTRA_URL_TIMEOUT", "6"))
