@@ -865,15 +865,10 @@ def create_filtered_configs():
         if key in seen_hostport: continue
         
         is_ok = False
-        # Сначала SNI
-        if sni_regex.search(cfg):
+        # Проверка только по CIDR
+        if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
             is_ok = True
-            count_sni += 1
-        # Если не SNI, то CIDR
-        elif cidr_networks:
-            if is_ip_whitelisted(hp[0], cidr_networks):
-                is_ok = True
-                count_cidr += 1
+            count_cidr += 1
         
         if is_ok:
             seen_hostport.add(key)
