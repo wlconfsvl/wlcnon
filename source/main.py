@@ -109,9 +109,9 @@ EXTRA_URLS_FOR_26 = [
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
 ]
 
-# Добавляем ссылку только если она существует (не None и не пустая строка)
-#if secret_url:
-#    EXTRA_URLS_FOR_26.append(secret_url)
+ Добавляем ссылку только если она существует (не None и не пустая строка)
+if secret_url:
+    EXTRA_URLS_FOR_26.append(secret_url)
 
 # Best-effort fetch tuning for optional sources (26-й файл)
 EXTRA_URL_TIMEOUT = int(os.environ.get("EXTRA_URL_TIMEOUT", "6"))
