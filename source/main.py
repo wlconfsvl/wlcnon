@@ -101,7 +101,7 @@ URLS = [
 
 # Источники для 26-го файла (без SNI проверки, только дедупликация)
 # Получаем ссылку из переменной, если она есть
-#secret_url = os.environ.get("CONFIGSWORKING")
+secret_url = os.environ.get("CONFIGSWORKING")
 
 EXTRA_URLS_FOR_26 = [
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
@@ -109,7 +109,7 @@ EXTRA_URLS_FOR_26 = [
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
 ]
 
- Добавляем ссылку только если она существует (не None и не пустая строка)
+# Добавляем ссылку только если она существует (не None и не пустая строка)
 if secret_url:
     EXTRA_URLS_FOR_26.append(secret_url)
 
