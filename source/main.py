@@ -860,7 +860,10 @@ def create_filtered_configs():
     for cfg in all_raw_configs:
         hp = _extract_host_port(cfg)
         if not hp: continue
-        
+
+        if '#' in cfg and re.search(r'🇳🇱|🇺🇸', urllib.parse.unquote(cfg.split('#',1)[1])):
+        continue
+
         key = f"{hp[0].lower()}:{hp[1]}"
         if key in seen_hostport: continue
         
@@ -869,9 +872,6 @@ def create_filtered_configs():
         if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
             is_ok = True
             count_cidr += 1
-
-        if '#' in cfg and re.search(r'🇳🇱|🇺🇸', urllib.parse.unquote(cfg.split('#',1)[1])):
-            continue
         
         if is_ok:
             seen_hostport.add(key)
