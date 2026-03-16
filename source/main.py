@@ -862,7 +862,7 @@ def create_filtered_configs():
         if not hp: continue
 
         if '#' in cfg and re.search(r'🇳🇱|🇺🇸', urllib.parse.unquote(cfg.split('#',1)[1])):
-        continue
+            continue
 
         key = f"{hp[0].lower()}:{hp[1]}"
         if key in seen_hostport: continue
