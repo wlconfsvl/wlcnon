@@ -841,7 +841,7 @@ def create_filtered_configs():
                 line = line.strip()
                 if not line or line.startswith('#'):
                     continue
-                line = re.sub(r'#.*?\K\s*@.*', '', line)
+                line = re.sub(r'(%20%7C)?%20%40\w+$', '', line)
                 line = re.sub(r'#%5B[^%]+%5D', '#%5BRunDun%5D', line)
 
                 configs.append(line)
