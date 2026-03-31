@@ -101,7 +101,7 @@ URLS = [
 
 # Источники для 26-го файла (без SNI проверки, только дедупликация)
 # Получаем ссылку из переменной, если она есть
-#secret_url = os.environ.get("CONFIGSWORKING")
+secret_url = os.environ.get("CONFIGSWORKING")
 wl_secret_url = os.environ.get("WLCONFIGSWORKING")
 
 
@@ -112,8 +112,8 @@ EXTRA_URLS_FOR_26 = [
 ]
 
 # Добавляем ссылку только если она существует (не None и не пустая строка)
-#if secret_url:
-#    EXTRA_URLS_FOR_26.append(secret_url)
+if secret_url:
+    EXTRA_URLS_FOR_26.append(secret_url)
 if wl_secret_url:
     EXTRA_URLS_FOR_26.append(wl_secret_url)
 
