@@ -871,27 +871,30 @@ def create_filtered_configs():
     count_sni = 0
     count_cidr = 0
 
+    candidates = []
     for cfg in all_raw_configs:
         hp = _extract_host_port(cfg)
         if not hp: continue
 
-        if '#' in cfg and re.search(r'🇳🇱|🇺🇸|🌐 Anycast-IP', urllib.parse.unquote(cfg.split('#',1)[1])):
+        if '#' in cfg and re.search(r'🇺🇸|🌐 Anycast-IP', urllib.parse.unquote(cfg.split('#',1)[1])):
             continue
 
         key = f"{hp[0].lower()}:{hp[1]}"
         if key in seen_hostport: continue
-        
-        is_ok = False
-        # Проверка только по CIDR
+
         if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
-            is_ok = True
-            count_cidr += 1
-        
-        if is_ok:
-            if not tcp_ping(hp[0], hp[1]):
-                continue
             seen_hostport.add(key)
-            unique_configs.append(cfg)
+            candidates.append((cfg, hp))
+            count_cidr += 1
+
+    def _check(item):
+        cfg, hp = item
+        return cfg if tcp_ping(hp[0], hp[1]) else None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=32) as pool:
+        results = pool.map(_check, candidates)
+
+    unique_configs = [cfg for cfg in results if cfg]
 
     log(f"ℹ️ Итог 26.txt: SNI={count_sni}, CIDR={count_cidr}. Всего: {len(unique_configs)}")
 
