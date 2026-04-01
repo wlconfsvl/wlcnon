@@ -589,6 +589,15 @@ def is_ip_whitelisted(address, networks):
         pass
     return False
 
+def tcp_ping(host: str, port, attempts: int = 3, timeout: float = 2.0) -> bool:
+    for _ in range(attempts):
+        try:
+            with socket.create_connection((host, int(port)), timeout=timeout):
+                return True
+        except Exception:
+            continue
+    return False
+
 def create_filtered_configs():
     """Создает 26-й файл с конфигами для SNI/CIDR белых списков"""
     sni_domains = [
@@ -879,6 +888,8 @@ def create_filtered_configs():
             count_cidr += 1
         
         if is_ok:
+            if not tcp_ping(hp[0], hp[1]):
+                continue
             seen_hostport.add(key)
             unique_configs.append(cfg)
 
