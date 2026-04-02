@@ -29,5 +29,9 @@ jobs:
           MY_TOKEN: ${{ secrets.WLCNONKEY }}
           CONFIGSWORKING: ${{ secrets.CONFIGSWORKING }}
           WLCONFIGSWORKING: ${{ secrets.WLCONFIGSWORKING }}
+          WLCNONREP_TOKEN: ${{ secrets.WLCNONREP_TOKEN }}
+          WLCNONREP_REPO: ${{ secrets.WLCNONREP_REPO }}
+          WLCNONREP_PATH: ${{ secrets.WLCNONREP_PATH }}
+          WLCNONREP_HEADERS: ${{ secrets.WLCNONREP_HEADERS }}
         run: |
           cd source && python main.py
