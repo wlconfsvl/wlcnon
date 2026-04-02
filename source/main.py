@@ -589,7 +589,7 @@ def is_ip_whitelisted(address, networks):
         pass
     return False
 
-def tcp_ping(host: str, port, attempts: int = 3, timeout: float = 2.0) -> bool:
+def tcp_ping(host: str, port, attempts: int = 2, timeout: float = 2.0) -> bool:
     for _ in range(attempts):
         try:
             with socket.create_connection((host, int(port)), timeout=timeout):
