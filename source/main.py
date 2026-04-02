@@ -414,12 +414,12 @@ def update_readme_table():
     except Exception as e:
         log(f"⚠️ Ошибка при обновлении README.md: {e}")
 
-def upload_to_github(local_path, remote_path):
+def upload_to_github(local_path, remote_path, repo=None):
     if not os.path.exists(local_path):
         log(f"❌ Файл {local_path} не найден.")
         return
 
-    repo = REPO
+    repo = repo or REPO
 
     with open(local_path, "r", encoding="utf-8") as file:
         content = file.read()
@@ -937,10 +937,21 @@ def main(dry_run: bool = False):
     if local_path_26 and not dry_run:
         upload_to_github(local_path_26, "githubmirror/26.txt")
 
+        wlcnonrep_token = os.environ.get("WLCNONREP_TOKEN")
+        wlcnonrep_repo = os.environ.get("WLCNONREP_REPO")
+        wlcnonrep_path = os.environ.get("WLCNONREP_PATH", "githubmirror/26.txt")
+        wlcnonrep_headers = os.environ.get("WLCNONREP_HEADERS", "")
+        if wlcnonrep_token and wlcnonrep_repo and local_path_26:
+            with open(local_path_26, "r", encoding="utf-8") as f:
+                body = re.sub(r'^(#[^\n]*\n|\n)+', '', f.read())
+            local_path_tmp = "githubmirror/26_tmp.txt"
+            with open(local_path_tmp, "w", encoding="utf-8") as f:
+                f.write(wlcnonrep_headers.replace("{count}", str(len(body.splitlines()))) + "\n\n" + body)
+            repo2 = Github(auth=Auth.Token(wlcnonrep_token)).get_repo(wlcnonrep_repo)
+            upload_to_github(local_path_tmp, wlcnonrep_path, repo2)
     # Обновляем таблицы в README.md после всех загрузок
     if not dry_run:
         update_readme_table()
-
     # Вывод логов
     ordered_keys = sorted(k for k in LOGS_BY_FILE.keys() if k != 0)
     output_lines: list[str] = []
