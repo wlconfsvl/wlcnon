@@ -1043,9 +1043,8 @@ def create_filtered_configs():
         if '#' in cfg and re.search(r'🇺🇸|🌐 Anycast-IP', urllib.parse.unquote(cfg.split('#',1)[1])):
             continue
 
-        uuid = _extract_uuid(cfg)
         tunnel = _extract_tunnel_key(cfg)
-        key = f"{hp[0].lower()}:{hp[1]}:{uuid}:{tunnel}"
+        key = f"{hp[0].lower()}:{hp[1]}:{tunnel}"
         if key in seen_hostport: continue
 
         if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
