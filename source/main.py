@@ -17,7 +17,9 @@ import re
 import os
 import ipaddress
 import socket
-
+import subprocess
+import tempfile
+import time
 # -------------------- ЛОГИРОВАНИЕ --------------------
 LOGS_BY_FILE: dict[int, list[str]] = defaultdict(list)
 _LOG_LOCK = threading.Lock()
@@ -598,6 +600,136 @@ def tcp_ping(host: str, port, attempts: int = 2, timeout: float = 2.0) -> bool:
             continue
     return False
 
+def _ensure_xray() -> str | None:
+    path = "/tmp/xray_bin/xray"
+    if os.path.isfile(path) and os.access(path, os.X_OK):
+        return path
+    import zipfile, urllib.request as ur
+    os.makedirs("/tmp/xray_bin", exist_ok=True)
+    log("⬇️ Скачиваем xray-core...")
+    try:
+        ur.urlretrieve(
+            "https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip",
+            "/tmp/xray.zip"
+        )
+        with zipfile.ZipFile("/tmp/xray.zip") as z:
+            z.extract("xray", "/tmp/xray_bin/")
+        os.chmod(path, 0o755)
+        log("✅ xray-core готов")
+        return path
+    except Exception as e:
+        log(f"⚠️ Не удалось скачать xray-core: {e}")
+        return None
+
+
+def _get_free_port() -> int:
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def xray_verify(config_line: str, xray_path: str, timeout: float = 8.0) -> bool:
+    """Проверяет vless конфиг через реальный туннель. Для остальных протоколов — TCP пинг."""
+    if not config_line.startswith("vless://"):
+        hp = re.search(r'(?:@|//)([\w\.-]+):(\d{1,5})', config_line)
+        return bool(hp and tcp_ping(hp.group(1), hp.group(2)))
+
+    try:
+        body = config_line[8:].split("#")[0]
+        user_host, _, qs = body.partition("?")
+        uuid, _, hostport = user_host.rpartition("@")
+        host, _, port_s = hostport.rpartition(":")
+        port = int(port_s)
+        p = dict(urllib.parse.parse_qsl(qs))
+    except Exception:
+        return False
+
+    local_port = _get_free_port()
+    stream = {"network": p.get("type", "tcp"), "security": p.get("security", "none")}
+
+    if p.get("security") == "reality":
+        stream["realitySettings"] = {
+            "serverName": p.get("sni", host),
+            "fingerprint": p.get("fp", "chrome"),
+            "publicKey": p.get("pbk", ""),
+            "shortId": p.get("sid", ""),
+            "spiderX": p.get("spx", ""),
+        }
+    elif p.get("security") == "tls":
+        stream["tlsSettings"] = {
+            "serverName": p.get("sni", host),
+            "fingerprint": p.get("fp", "chrome"),
+            "allowInsecure": p.get("insecure", "0") == "1",
+        }
+
+    if p.get("type") == "ws":
+        stream["wsSettings"] = {
+            "path": urllib.parse.unquote(p.get("path", "/")),
+            "headers": {"Host": p.get("host", host)},
+        }
+    elif p.get("type") == "xhttp":
+        stream["xhttpSettings"] = {
+            "path": urllib.parse.unquote(p.get("path", "/")),
+            "host": p.get("host", host),
+            "mode": "auto",
+        }
+
+    user = {"id": uuid, "encryption": "none"}
+    if p.get("flow"):
+        user["flow"] = p["flow"]
+
+    cfg = {
+        "log": {"loglevel": "none"},
+        "inbounds": [{"listen": "127.0.0.1", "port": local_port,
+                      "protocol": "socks",
+                      "settings": {"auth": "noauth", "udp": False}}],
+        "outbounds": [{"protocol": "vless",
+                       "settings": {"vnext": [{"address": host, "port": port, "users": [user]}]},
+                       "streamSettings": stream}],
+    }
+
+    cfg_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
+    json.dump(cfg, cfg_file)
+    cfg_file.close()
+    proc = None
+    try:
+        proc = subprocess.Popen(
+            [xray_path, "run", "-c", cfg_file.name],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        deadline = time.time() + 2.0
+        while time.time() < deadline:
+            try:
+                with socket.create_connection(("127.0.0.1", local_port), 0.1):
+                    break
+            except Exception:
+                time.sleep(0.05)
+        else:
+            return False
+
+        # SOCKS5 → HEAD запрос через туннель
+        s = socket.create_connection(("127.0.0.1", local_port), timeout=timeout - 2)
+        s.settimeout(timeout - 2)
+        s.sendall(b"\x05\x01\x00")
+        if s.recv(2) != b"\x05\x00":
+            return False
+        s.sendall(b"\x05\x01\x00\x01\x01\x01\x01\x01\x00\x50")
+        if s.recv(10)[1:2] != b"\x00":
+            return False
+        s.sendall(b"HEAD / HTTP/1.1\r\nHost: 1.1.1.1\r\nConnection: close\r\n\r\n")
+        result = b"HTTP/" in s.recv(64)
+        s.close()
+        return result
+    except Exception:
+        return False
+    finally:
+        if proc:
+            proc.kill(); proc.wait()
+        try:
+            os.unlink(cfg_file.name)
+        except Exception:
+            pass
+
 def create_filtered_configs():
     """Создает 26-й файл с конфигами для SNI/CIDR белых списков"""
     sni_domains = [
@@ -887,15 +1019,20 @@ def create_filtered_configs():
             candidates.append((cfg, hp))
             count_cidr += 1
 
+    xray_path = _ensure_xray()
+
     def _check(item):
         cfg, hp = item
-        return cfg if tcp_ping(hp[0], hp[1]) else None
+        if not tcp_ping(hp[0], hp[1]):
+            return None
+        if xray_path:
+            return cfg if xray_verify(cfg, xray_path) else None
+        return cfg
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=32) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         results = pool.map(_check, candidates)
 
     unique_configs = [cfg for cfg in results if cfg]
-
     log(f"ℹ️ Итог 26.txt: SNI={count_sni}, CIDR={count_cidr}. Всего: {len(unique_configs)}")
 
     # 5. Сохранение
