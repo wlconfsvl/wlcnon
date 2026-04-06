@@ -1009,6 +1009,32 @@ def create_filtered_configs():
     count_sni = 0
     count_cidr = 0
 
+    def _extract_uuid(line: str) -> str:
+        if line.startswith("vmess://"):
+            try:
+                payload = line[8:].split("#")[0]
+                rem = len(payload) % 4
+                if rem: payload += '=' * (4 - rem)
+                decoded = json.loads(base64.b64decode(payload).decode('utf-8', errors='ignore'))
+                return decoded.get('id', '')
+            except:
+                return ''
+        m = re.search(r'(?:vless|trojan)://([a-f0-9\-]{36})', line)
+        return m.group(1) if m else ''
+
+    def _extract_tunnel_key(line: str) -> str:
+        try:
+            qs = line.split('?', 1)[1].split('#')[0] if '?' in line else ''
+            p = dict(urllib.parse.parse_qsl(qs))
+            net  = p.get('type', 'tcp')
+            path = urllib.parse.unquote(p.get('path', ''))
+            sni  = p.get('sni', '')
+            svc  = p.get('serviceName', '')
+            proto = line.split('://')[0]
+            return f"{proto}:{net}:{path}:{sni}:{svc}"
+        except:
+            return ''
+
     candidates = []
     for cfg in all_raw_configs:
         hp = _extract_host_port(cfg)
@@ -1017,7 +1043,9 @@ def create_filtered_configs():
         if '#' in cfg and re.search(r'🇺🇸|🌐 Anycast-IP', urllib.parse.unquote(cfg.split('#',1)[1])):
             continue
 
-        key = f"{hp[0].lower()}:{hp[1]}"
+        uuid = _extract_uuid(cfg)
+        tunnel = _extract_tunnel_key(cfg)
+        key = f"{hp[0].lower()}:{hp[1]}:{uuid}:{tunnel}"
         if key in seen_hostport: continue
 
         if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
