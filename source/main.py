@@ -1027,12 +1027,19 @@ def create_filtered_configs():
 
     xray_path = _ensure_xray()
 
+    XRAY_VERIFY_ATTEMPTS = int(os.environ.get("XRAY_VERIFY_ATTEMPTS", "2"))
+
     def _check(item):
         cfg, hp = item
         if not tcp_ping(hp[0], hp[1]):
             return None
         if xray_path:
-            return cfg if xray_verify(cfg, xray_path) else None
+            for attempt in range(1, XRAY_VERIFY_ATTEMPTS + 1):
+                if xray_verify(cfg, xray_path):
+                    return cfg
+                if attempt < XRAY_VERIFY_ATTEMPTS:
+                    time.sleep(0.5 * attempt)
+            return None
         return cfg
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
