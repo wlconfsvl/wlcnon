@@ -442,7 +442,10 @@ def upload_to_github(local_path, remote_path, repo=None):
                     )
                     log(f"🆕 Файл {remote_path} создан.")
                     # Добавляем в обновленные файлы
-                    file_index = int(remote_path.split('/')[1].split('.')[0])
+                    try:
+                        file_index = int(re.search(r'\d+', remote_path.split('/')[-1]).group())
+                    except:
+                        file_index = 0
                     with _UPDATED_FILES_LOCK:
                         updated_files.add(file_index)
                     return
@@ -469,7 +472,10 @@ def upload_to_github(local_path, remote_path, repo=None):
                 )
                 log(f"🚀 Файл {remote_path} обновлён в репозитории.")
                 # Добавляем в обновленные файлы
-                file_index = int(remote_path.split('/')[1].split('.')[0])
+                try:
+                    file_index = int(re.search(r'\d+', remote_path.split('/')[-1]).group())
+                except:
+                    file_index = 0
                 with _UPDATED_FILES_LOCK:
                     updated_files.add(file_index)
                 return
