@@ -597,7 +597,7 @@ def is_ip_whitelisted(address, networks):
         pass
     return False
 
-def tcp_ping(host: str, port, attempts: int = 2, timeout: float = 2.0) -> bool:
+def tcp_ping(host: str, port, attempts: int = 2, timeout: float = 3.0) -> bool:
     for _ in range(attempts):
         try:
             with socket.create_connection((host, int(port)), timeout=timeout):
@@ -703,7 +703,7 @@ def xray_verify(config_line: str, xray_path: str, timeout: float = 8.0) -> bool:
             [xray_path, "run", "-c", cfg_file.name],
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         )
-        deadline = time.time() + 2.0
+        deadline = time.time() + 4.0
         while time.time() < deadline:
             try:
                 with socket.create_connection(("127.0.0.1", local_port), 0.1):
@@ -1054,7 +1054,7 @@ def create_filtered_configs():
 
     xray_path = _ensure_xray()
 
-    XRAY_VERIFY_ATTEMPTS = int(os.environ.get("XRAY_VERIFY_ATTEMPTS", "2"))
+    XRAY_VERIFY_ATTEMPTS = int(os.environ.get("XRAY_VERIFY_ATTEMPTS", "3"))
 
     def _check(item):
         cfg, hp = item
