@@ -1049,10 +1049,8 @@ def create_filtered_configs():
         key = f"{hp[0].lower()}:{hp[1]}:{tunnel}"
         if key in seen_hostport: continue
 
-        if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
-            seen_hostport.add(key)
-            candidates.append((cfg, hp))
-            count_cidr += 1
+        seen_hostport.add(key)
+        candidates.append((cfg, hp))
 
     xray_path = _ensure_xray()
 
