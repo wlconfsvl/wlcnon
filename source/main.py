@@ -1052,7 +1052,7 @@ def create_filtered_configs():
             candidates.append((cfg, hp))
             count_cidr += 1
 
-    xray_path = _ensure_xray()
+    xray_path = None
 
     XRAY_VERIFY_ATTEMPTS = int(os.environ.get("XRAY_VERIFY_ATTEMPTS", "3"))
 
