@@ -703,7 +703,7 @@ def xray_verify(config_line: str, xray_path: str, timeout: float = 8.0) -> bool:
             [xray_path, "run", "-c", cfg_file.name],
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         )
-        deadline = time.time() + 4.0
+        deadline = time.time() + 6.0
         while time.time() < deadline:
             try:
                 with socket.create_connection(("127.0.0.1", local_port), 0.1):
