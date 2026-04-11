@@ -1050,7 +1050,7 @@ def create_filtered_configs():
         seen_hostport.add(key)
         candidates.append((cfg, hp))
 
-    xray_path = None
+    xray_path = _ensure_xray()
 
     XRAY_VERIFY_ATTEMPTS = int(os.environ.get("XRAY_VERIFY_ATTEMPTS", "3"))
 
