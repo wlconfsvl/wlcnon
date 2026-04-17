@@ -108,7 +108,7 @@ secret_url = os.environ.get("CONFIGSWORKING")
 
 
 EXTRA_URLS_FOR_26 = [
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
+#    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
 #    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-SNI-RU-all.txt",
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
 ]
@@ -840,6 +840,7 @@ def create_filtered_configs():
             return ''
 
     candidates = []
+    bypass_set = set(_load_extra_configs("https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt"))
     for cfg in all_raw_configs:
         hp = _extract_host_port(cfg)
         if not hp: continue
@@ -851,7 +852,7 @@ def create_filtered_configs():
         key = f"{hp[0].lower()}:{hp[1]}:{tunnel}"
         if key in seen_hostport: continue
 
-        if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
+        if cfg in bypass_set or (cidr_networks and is_ip_whitelisted(hp[0], cidr_networks)):
             seen_hostport.add(key)
             candidates.append((cfg, hp))
             count_cidr += 1
