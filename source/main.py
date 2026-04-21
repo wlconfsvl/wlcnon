@@ -108,11 +108,15 @@ secret_url = os.environ.get("CONFIGSWORKING")
 
 
 EXTRA_URLS_FOR_26 = [
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
+#    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
 #    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-SNI-RU-all.txt",
     "https://raw.githubusercontent.com/zieng2/wl/refs/heads/main/vless_universal.txt",
-    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt"
+#    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt"
 ]
+CIDR_EXEMPT_URLS = {
+    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt",
+    "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt"
+}
 
 # Добавляем ссылку только если она существует (не None и не пустая строка)
 if secret_url:
@@ -841,7 +845,7 @@ def create_filtered_configs():
             return ''
 
     candidates = []
-    for cfg in all_raw_configs:
+    for cfg, source_url in all_raw_configs:
         hp = _extract_host_port(cfg)
         if not hp: continue
 
@@ -852,7 +856,7 @@ def create_filtered_configs():
         key = f"{hp[0].lower()}:{hp[1]}:{tunnel}"
         if key in seen_hostport: continue
 
-        if cidr_networks and is_ip_whitelisted(hp[0], cidr_networks):
+        if source_url in CIDR_EXEMPT_URLS or (cidr_networks and is_ip_whitelisted(hp[0], cidr_networks)):
             seen_hostport.add(key)
             candidates.append((cfg, hp))
             count_cidr += 1
