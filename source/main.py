@@ -804,7 +804,7 @@ def create_filtered_configs():
                     
         except Exception as e:
             log(f"⚠️ Ошибка загрузки {url}: {e}")
-        return configs
+        return [(cfg, url) for cfg in configs]
 
     all_raw_configs = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
