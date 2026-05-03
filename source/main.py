@@ -118,8 +118,6 @@ CIDR_EXEMPT_URLS = {
     "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt"
 }
 
-BLACK_VLESS_URL = "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS.txt"
-
 # Добавляем ссылку только если она существует (не None и не пустая строка)
 if secret_url:
     EXTRA_URLS_FOR_26.append(secret_url)
@@ -937,24 +935,6 @@ def main(dry_run: bool = False):
                 f.write(wlcnonrep_headers.replace("{count}", str(len(body.splitlines()))) + "\n\n" + body)
             repo2 = Github(auth=Auth.Token(wlcnonrep_token)).get_repo(wlcnonrep_repo)
             upload_to_github(local_path_tmp, wlcnonrep_path, repo2)
-
-            try:
-                bv_data, _ = filter_insecure_configs("bv_tmp", fetch_data(BLACK_VLESS_URL, timeout=15))
-                bv_candidates = [(l, m.group(1), m.group(2)) for line in bv_data.splitlines()
-                    if re.match(r'^(vless|vmess|trojan|ss|tuic|hysteria2?)://', l := line.strip())
-                    and not ('#' in l and re.search(r'🌐 Anycast-IP', urllib.parse.unquote(l.split('#', 1)[1])))
-                    and (m := re.search(r'(?:@|//)([\w\.-]+):(\d{1,5})', l))]
-                seen_bv = set()
-                bv_unique = [(l, h, p) for l, h, p in bv_candidates if (k := f"{h.lower()}:{p}") not in seen_bv and not seen_bv.add(k)]
-                with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
-                    bv_results = [c[0] for c, ok in zip(bv_unique, pool.map(lambda c: tcp_ping(c[1], c[2]), bv_unique)) if ok]
-                local_path_bv = "githubmirror/bv_tmp.txt"
-                with open(local_path_bv, "w", encoding="utf-8") as f:
-                    f.write("\n".join(bv_results))
-                upload_to_github(local_path_bv, "githubmirror/27.txt", repo2)
-                log(f"ℹ️ 27.txt: загружено {len(bv_results)} конфигов во второй репозиторий")
-            except Exception as e:
-                log(f"⚠️ Ошибка BLACK_VLESS: {e}")
     # Обновляем таблицы в README.md после всех загрузок
     if not dry_run:
         update_readme_table()
