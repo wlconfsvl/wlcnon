@@ -1,14 +1,13 @@
 #profile-title: RunDunDun Configs
 #announce: base64: 0J7QkdCd0J7QktCb0K/QmdCi0JUg0J/QntCU0J/QmNCh0JrQoyDQn9CQ0KDQoyDQoNCQ0Jcg0JIg0JTQldCd0KwK0J/QvtC70L3Ri9C5INGA0YPQvdC00YPQvdC00YPQvQ==
 #subscription-always-hwid-enable: 1
-#sub-info-text: Активных конфигов: 5
+#sub-info-text: Активных конфигов: 4
 #sub-info-color: blue
 #subscription-auto-update-enable: 1
 #color-profile: eyJiYWNrZ3JvdW5kR3JhZGllbnRSb3RhdGlvbkFuZ2xlIjozNy4xLCJzZXJ2ZXJSb3dCYWNrZ3JvdW5kQ29sb3IiOiIjMUEwNTA1NjciLCJzdWJzSGVhZGVyQ29sb3IiOiIjM0IxMTExRkYiLCJwcm9maWxlV2ViUGFnZUljb25Db2xvciI6IiNGRkEwQTBGRiIsInNlbGVjdGVkU2VydmVyUm93Q29sb3IiOiIjNEExNjE2QjUiLCJkaXNjbG9zdXJlU3ViSGVhZGVyVGV4dENvbG9yIjoiI0RGQzJDMkZGIiwiYnV0dG9uVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwiYnV0dG9uVGltZXJDb2xvciI6IiNGRkZGRkZGRiIsInN1YnNjcmlwdGlvbkluZm9CYWNrZ3JvdW5kQ29sb3IiOiIjMTIwMDAwRkYiLCJiYWNrZ3JvdW5kQ29sb3JzIjpbIiMwQTBBMEFGRiIsIiMxRjA4MDhGRiIsIiNENDE0MTQ3RiJdLCJkaXNjbG9zdXJlSGVhZGVyVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwiYmFja2dyb3VuZEdyYWRpZW50Q29sb3JJbnRlbnNpdHkiOjEsImFkZGl0aW9uYWxPcHRpb25zQnV0dG9uQ29sb3IiOiIjRkZGRkZGRkYiLCJidXR0b25JbWFnZVR5cGUiOiJsaWdodCIsInNlcnZlclJvd1N1YlRpdGxlVGV4dENvbG9yIjoiI0RGQzJDMkZGIiwic3VwcG9ydEljb25Db2xvciI6IiNGRkZGRkZGRiIsInRvcEJhckJ1dHRvbnNDb2xvciI6IiNGRkZGRkZGRiIsInN1YnNjcmlwdGlvblRyYWZmaWNCYWNrZ3JvdW5kQ29sb3IiOiIjNUUxNDE0RkYiLCJzdWJIZWFkZXJCdXR0b25Db2xvciI6IiNGRkZGRkZGRiIsImJ1dHRvbkNvbG9yIjoiI0UwMUIxQkZGIiwicG93ZXJJY29uQ29sb3IiOiIjMEEwQTBBRkYiLCJzdWJzY3JpcHRpb25JbmZvVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwic2VydmVyUm93VGl0bGVUZXh0Q29sb3IiOiIjRkZGRkZGRkYiLCJiYWNrZ3JvdW5kSW1hZ2VUeXBlIjoic3lzdGVtIiwiZWxpcHNlQ29sb3JzIjpbIiNGRjAwMDBGRiIsIiNGRjMwMzBFMCIsIiNGRjZBMDBGRiJdLCJzZXJ2ZXJSb3dDaGV2cm9uQ29sb3IiOiIjRkZGRkZGRkYifQ==
 #profile-update-interval: 1
 
-vless://6d60c73d-5915-4cf8-b155-e522dfd863bb@31.128.37.67:16560?encryption=none&security=none&type=raw#%F0%9F%87%B7%F0%9F%87%BA%20Beget%20%E2%80%94%20%239
-vless://2dfd0db2-cd4e-4c09-97fc-67c3d8ee9409@5.188.141.67:8449?alpn=h2&encryption=none&flow=xtls-rprx-vision&fp=firefox&security=tls&sni=edge-vk.vpn.partners&type=raw#%F0%9F%87%B5%F0%9F%87%B1%20Poland%20%E2%80%94%20%23153
+vless://6d60c73d-5915-4cf8-b155-e522dfd863bb@31.128.37.67:16560?encryption=none&security=none&type=raw#%F0%9F%87%B7%F0%9F%87%BA%20Beget%20%E2%80%94%20%2315
+vless://d8b03532-d9b6-4955-81d0-293d8dc1c30e@217.19.122.206:9443?encryption=none&flow=xtls-rprx-vision&fp=edge&pbk=uYiZWRgbowvS9uOhVZTe0FBS1pLzA3QMyQ_NfDh4_h8&security=reality&sid=d40efd6b362b7ec6&sni=optim.tildacdn.pub&type=raw#%F0%9F%87%AB%F0%9F%87%B7%20France%20%E2%80%94%20%2389
 vless://6d60c73d-5915-4cf8-b155-e522dfd863bb@31.128.37.67:16560?security=none&encryption=none&headerType=none&type=tcp#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BA%20RU-34932
-vless://155e8dd4-a559-407a-9ea8-13a5e829f066@87.228.122.108:4100?encryption=none&type=ws&security=none&path=/v1#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BA%20RU-30340
 vless://f2ea3f68-6e31-4e07-a78c-fff6ebe246c3@178.248.236.77:58443?security=reality&encryption=none&pbk=IKz1z0scyrYd-eQD9AcVvmoJDcITPXlKu90guFPrUh4&headerType=none&fp=qq&type=tcp&flow=xtls-rprx-vision&sni=rutube.ru&sid=1f8c1a2e913d1f05#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BA%20RU-35084
