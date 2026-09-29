@@ -603,7 +603,7 @@ def is_ip_whitelisted(address, networks):
         pass
     return False
 
-def tcp_ping(host: str, port, attempts: int = 2, timeout: float = 3.0) -> bool:
+def tcp_ping(host: str, port, attempts: int = 2, timeout: float = 5.0) -> bool:
     for _ in range(attempts):
         try:
             with socket.create_connection((host, int(port)), timeout=timeout):
@@ -640,7 +640,7 @@ def _get_free_port() -> int:
         return s.getsockname()[1]
 
 
-def xray_verify(config_line: str, xray_path: str, timeout: float = 8.0) -> bool:
+def xray_verify(config_line: str, xray_path: str, timeout: float = 11.0) -> bool:
     """Проверяет vless конфиг через реальный туннель. Для остальных протоколов — TCP пинг."""
     if not config_line.startswith("vless://"):
         hp = re.search(r'(?:@|//)([\w\.-]+):(\d{1,5})', config_line)
