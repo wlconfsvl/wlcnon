@@ -1,12 +1,14 @@
 #profile-title: RunDunDun Configs
 #announce: base64: 0J7QkdCd0J7QktCb0K/QmdCi0JUg0J/QntCU0J/QmNCh0JrQoyDQn9CQ0KDQoyDQoNCQ0Jcg0JIg0JTQldCd0KwK0J/QvtC70L3Ri9C5INGA0YPQvdC00YPQvdC00YPQvQ==
 #subscription-always-hwid-enable: 1
-#sub-info-text: Активных конфигов: 3
+#sub-info-text: Активных конфигов: 5
 #sub-info-color: blue
 #subscription-auto-update-enable: 1
 #color-profile: eyJiYWNrZ3JvdW5kR3JhZGllbnRSb3RhdGlvbkFuZ2xlIjozNy4xLCJzZXJ2ZXJSb3dCYWNrZ3JvdW5kQ29sb3IiOiIjMUEwNTA1NjciLCJzdWJzSGVhZGVyQ29sb3IiOiIjM0IxMTExRkYiLCJwcm9maWxlV2ViUGFnZUljb25Db2xvciI6IiNGRkEwQTBGRiIsInNlbGVjdGVkU2VydmVyUm93Q29sb3IiOiIjNEExNjE2QjUiLCJkaXNjbG9zdXJlU3ViSGVhZGVyVGV4dENvbG9yIjoiI0RGQzJDMkZGIiwiYnV0dG9uVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwiYnV0dG9uVGltZXJDb2xvciI6IiNGRkZGRkZGRiIsInN1YnNjcmlwdGlvbkluZm9CYWNrZ3JvdW5kQ29sb3IiOiIjMTIwMDAwRkYiLCJiYWNrZ3JvdW5kQ29sb3JzIjpbIiMwQTBBMEFGRiIsIiMxRjA4MDhGRiIsIiNENDE0MTQ3RiJdLCJkaXNjbG9zdXJlSGVhZGVyVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwiYmFja2dyb3VuZEdyYWRpZW50Q29sb3JJbnRlbnNpdHkiOjEsImFkZGl0aW9uYWxPcHRpb25zQnV0dG9uQ29sb3IiOiIjRkZGRkZGRkYiLCJidXR0b25JbWFnZVR5cGUiOiJsaWdodCIsInNlcnZlclJvd1N1YlRpdGxlVGV4dENvbG9yIjoiI0RGQzJDMkZGIiwic3VwcG9ydEljb25Db2xvciI6IiNGRkZGRkZGRiIsInRvcEJhckJ1dHRvbnNDb2xvciI6IiNGRkZGRkZGRiIsInN1YnNjcmlwdGlvblRyYWZmaWNCYWNrZ3JvdW5kQ29sb3IiOiIjNUUxNDE0RkYiLCJzdWJIZWFkZXJCdXR0b25Db2xvciI6IiNGRkZGRkZGRiIsImJ1dHRvbkNvbG9yIjoiI0UwMUIxQkZGIiwicG93ZXJJY29uQ29sb3IiOiIjMEEwQTBBRkYiLCJzdWJzY3JpcHRpb25JbmZvVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwic2VydmVyUm93VGl0bGVUZXh0Q29sb3IiOiIjRkZGRkZGRkYiLCJiYWNrZ3JvdW5kSW1hZ2VUeXBlIjoic3lzdGVtIiwiZWxpcHNlQ29sb3JzIjpbIiNGRjAwMDBGRiIsIiNGRjMwMzBFMCIsIiNGRjZBMDBGRiJdLCJzZXJ2ZXJSb3dDaGV2cm9uQ29sb3IiOiIjRkZGRkZGRkYifQ==
 #profile-update-interval: 1
 
-vless://dbe7df9a-c846-4305-9bbf-771c1b2f0520@46.149.68.140:443?encryption=none&type=tcp&security=reality&flow=xtls-rprx-vision&sni=video.flyflyfly.uk&pbk=hJAFs0uE6ALPK_hCctGQo1DbV6OYt2Yc40Mz_Y8VNVc&sid=92ba94c503e65638&fp=qq#%F0%9F%87%B7%F0%9F%87%BA%20Russia%20%5B%2ACIDR%5D
-vless://bc5ec86c-3e65-4272-994c-59a924c72a68@217.19.122.200:443?alpn=http%2F1.1&encryption=none&fp=chrome&host=fbsv6.guardora.pro&path=%2Fws&security=tls&sni=fbsv6.guardora.pro&type=ws#%F0%9F%87%B7%F0%9F%87%BA%20VK%20%E2%80%94%20%231
-vless://633f424e-2b11-48da-a6b3-a849dd71456f@45.12.75.242:26424?encryption=none&fp=chrome&pbk=l8AubqcxQO-HRFJy4pZL1vbLOo-eXit69s-XulSELE0&security=reality&sid=23103e1e&sni=ya.ru&type=raw#%F0%9F%87%B7%F0%9F%87%BA%20Beget%20%E2%80%94%20%232
+vless://027d304a-90a9-48c4-ad3c-599d4fabd59d@46.8.21.214:443?security=tls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-vision&sni=fast123.slopllex.app&fp=chrome#%F0%9F%87%AC%F0%9F%87%A7%20United%20Kingdom%20%7C%20%5B%2ACIDR%5D
+vless://bc5ec86c-3e65-4272-994c-59a924c72a68@217.19.122.200:443?alpn=http%2F1.1&encryption=none&fp=chrome&host=fbsv6.guardora.pro&path=%2Fws&security=tls&sni=fbsv6.guardora.pro&type=ws#%F0%9F%87%B7%F0%9F%87%BA%20VK%20%E2%80%94%20%239
+vless://633f424e-2b11-48da-a6b3-a849dd71456f@45.12.75.242:26424?encryption=none&fp=chrome&pbk=l8AubqcxQO-HRFJy4pZL1vbLOo-eXit69s-XulSELE0&security=reality&sid=23103e1e&sni=ya.ru&type=raw#%F0%9F%87%B7%F0%9F%87%BA%20Beget%20%E2%80%94%20%2310
+vless://da495553-3239-4d2b-9ded-d7c10f6896a3@185.141.227.190:8446?encryption=none&flow=xtls-rprx-vision&fp=firefox&pbk=NLQmEFT9-1ocGHnvGt7poB-1EJ6vxrJAzdZLvXoawy8&security=reality&sid=00000000&sni=passport.yandex.ru&type=raw#%F0%9F%87%A6%F0%9F%87%B9%20Austria%20%E2%80%94%20%2325
+vless://ff65fb9b-552f-426f-8321-4c85024377e6@194.55.239.148:443?encryption=none&flow=xtls-rprx-vision&fp=random&pbk=-GzslqnFGVkpNJvcZt7uKnMGOn8R2v_z6sLOtmci6B0&security=reality&sid=2fff0b51ab07386a&sni=my.selectel.ru&type=raw#%F0%9F%87%BA%F0%9F%87%B8%20United%20States%20%E2%80%94%20%2389
