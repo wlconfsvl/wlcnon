@@ -1,17 +1,20 @@
 #profile-title: RunDunDun Configs
 #announce: base64: 0J7QkdCd0J7QktCb0K/QmdCi0JUg0J/QntCU0J/QmNCh0JrQoyDQn9CQ0KDQoyDQoNCQ0Jcg0JIg0JTQldCd0KwK0J/QvtC70L3Ri9C5INGA0YPQvdC00YPQvdC00YPQvQ==
 #subscription-always-hwid-enable: 1
-#sub-info-text: Активных конфигов: 8
+#sub-info-text: Активных конфигов: 11
 #sub-info-color: blue
 #subscription-auto-update-enable: 1
 #color-profile: eyJiYWNrZ3JvdW5kR3JhZGllbnRSb3RhdGlvbkFuZ2xlIjozNy4xLCJzZXJ2ZXJSb3dCYWNrZ3JvdW5kQ29sb3IiOiIjMUEwNTA1NjciLCJzdWJzSGVhZGVyQ29sb3IiOiIjM0IxMTExRkYiLCJwcm9maWxlV2ViUGFnZUljb25Db2xvciI6IiNGRkEwQTBGRiIsInNlbGVjdGVkU2VydmVyUm93Q29sb3IiOiIjNEExNjE2QjUiLCJkaXNjbG9zdXJlU3ViSGVhZGVyVGV4dENvbG9yIjoiI0RGQzJDMkZGIiwiYnV0dG9uVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwiYnV0dG9uVGltZXJDb2xvciI6IiNGRkZGRkZGRiIsInN1YnNjcmlwdGlvbkluZm9CYWNrZ3JvdW5kQ29sb3IiOiIjMTIwMDAwRkYiLCJiYWNrZ3JvdW5kQ29sb3JzIjpbIiMwQTBBMEFGRiIsIiMxRjA4MDhGRiIsIiNENDE0MTQ3RiJdLCJkaXNjbG9zdXJlSGVhZGVyVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwiYmFja2dyb3VuZEdyYWRpZW50Q29sb3JJbnRlbnNpdHkiOjEsImFkZGl0aW9uYWxPcHRpb25zQnV0dG9uQ29sb3IiOiIjRkZGRkZGRkYiLCJidXR0b25JbWFnZVR5cGUiOiJsaWdodCIsInNlcnZlclJvd1N1YlRpdGxlVGV4dENvbG9yIjoiI0RGQzJDMkZGIiwic3VwcG9ydEljb25Db2xvciI6IiNGRkZGRkZGRiIsInRvcEJhckJ1dHRvbnNDb2xvciI6IiNGRkZGRkZGRiIsInN1YnNjcmlwdGlvblRyYWZmaWNCYWNrZ3JvdW5kQ29sb3IiOiIjNUUxNDE0RkYiLCJzdWJIZWFkZXJCdXR0b25Db2xvciI6IiNGRkZGRkZGRiIsImJ1dHRvbkNvbG9yIjoiI0UwMUIxQkZGIiwicG93ZXJJY29uQ29sb3IiOiIjMEEwQTBBRkYiLCJzdWJzY3JpcHRpb25JbmZvVGV4dENvbG9yIjoiI0ZGRkZGRkZGIiwic2VydmVyUm93VGl0bGVUZXh0Q29sb3IiOiIjRkZGRkZGRkYiLCJiYWNrZ3JvdW5kSW1hZ2VUeXBlIjoic3lzdGVtIiwiZWxpcHNlQ29sb3JzIjpbIiNGRjAwMDBGRiIsIiNGRjMwMzBFMCIsIiNGRjZBMDBGRiJdLCJzZXJ2ZXJSb3dDaGV2cm9uQ29sb3IiOiIjRkZGRkZGRkYifQ==
 #profile-update-interval: 1
 
-vless://633f424e-2b11-48da-a6b3-a849dd71456f@45.12.75.242:26424?encryption=none&fp=chrome&pbk=l8AubqcxQO-HRFJy4pZL1vbLOo-eXit69s-XulSELE0&security=reality&sid=23103e1e&sni=ya.ru&type=raw#%F0%9F%87%B7%F0%9F%87%BA%20Beget%20%E2%80%94%20%2371
-vless://2c634977-584e-4e1f-b501-1b70c77a6743@81.94.148.232:8443?alpn=h2%2Chttp%2F1.1&encryption=none&extra=null&fp=firefox&host=windytrout.net&mode=auto&path=%2Fapi%2Fv1%2Fupload&security=tls&sni=windytrout.net&type=xhttp#%F0%9F%87%A7%F0%9F%87%AC%20Bulgaria%20%E2%80%94%20%2395
-vless://c720cb74-4c84-4fce-b8ae-637dbaa16199@185.141.227.223:443?encryption=none&fp=safari&host=z1q3pv4g78.rucdncomp.pro&path=%2Fuseraction%2Fevents%2Fb892639b7195%2F&security=tls&sni=z1q3pv4g78.rucdncomp.pro&type=ws#%F0%9F%87%A9%F0%9F%87%AA%20Germany%20%E2%80%94%20%2396
-vless://54f22246-cc9c-4315-907a-6c94c901d20f@82.202.179.106:11443?encryption=none&flow=xtls-rprx-vision&fp=firefox&pbk=WWmwRoB2K7xonT6jzbhKen_Rp-UM7QCr_vMgmNZuggc&security=reality&sid=044a5e06faf5&sni=smartcaptcha.yandexcloud.net&type=raw#%F0%9F%87%AB%F0%9F%87%B7%20France%20%E2%80%94%20%23101
-vless://1ba0439d-384c-4a6e-9560-0439698beb2a@82.202.179.111:15443?encryption=none&flow=xtls-rprx-vision&fp=firefox&pbk=MNmqM2p3nUYZIqo0sTMXRXGzB5HquF-czSycvdqn3U4&security=reality&sid=b74f54b7&sni=smartcaptcha.yandexcloud.net&type=raw#%F0%9F%87%AB%F0%9F%87%B7%20France%20%E2%80%94%20%23102
-http://217.25.228.102:8888#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-155
-vless://1ba0439d-384c-4a6e-9560-0439698beb2a@82.202.182.42:3443?security=reality&encryption=none&pbk=YIXOvwrCFxQYKOP_GwdhbzZLlwgBIVVISXDpFZQBt0c&headerType=none&fp=firefox&type=tcp&flow=xtls-rprx-vision&sni=smartcaptcha.yandexcloud.net&sid=a5bb22e6a41ff20a#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-289
-http://158.160.234.55:1080#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-304
+vless://258d8fc5-206c-48fd-88df-169dbbe44d3f@103.24.207.40:8443?flow=xtls-rprx-vision&pbk=ygxQyBcJzlLgpSl3MCRDDiFET4TT-3wxa4GdG1obkCY&security=reality&sni=edge-fr.extazy.net&fp=ios#%F0%9F%87%A9%F0%9F%87%AA%20Germany%20%5B%2ACIDR%5D
+vless://2c634977-584e-4e1f-b501-1b70c77a6743@summerculture.net:2053?encryption=none&host=summerculture.net&mode=auto&path=%2Fapi%2Fv1%2Fupload&security=tls&sni=summerculture.net&type=xhttp&fp=chrome#%F0%9F%87%B7%F0%9F%87%BA%20Russia%20%7C%20%F0%9F%8C%90%20%7C%20%5B%2ACIDR%5D%20CDN
+vless://633f424e-2b11-48da-a6b3-a849dd71456f@45.12.75.242:26424?encryption=none&fp=chrome&pbk=l8AubqcxQO-HRFJy4pZL1vbLOo-eXit69s-XulSELE0&security=reality&sid=23103e1e&sni=ya.ru&type=raw#%F0%9F%87%B7%F0%9F%87%BA%20Beget%20%E2%80%94%20%2378
+vless://2c634977-584e-4e1f-b501-1b70c77a6743@81.94.148.232:8443?alpn=h2%2Chttp%2F1.1&encryption=none&extra=null&fp=firefox&host=windytrout.net&mode=auto&path=%2Fapi%2Fv1%2Fupload&security=tls&sni=windytrout.net&type=xhttp#%F0%9F%87%A7%F0%9F%87%AC%20Bulgaria%20%E2%80%94%20%23100
+vless://c720cb74-4c84-4fce-b8ae-637dbaa16199@185.141.227.223:443?encryption=none&fp=safari&host=z1q3pv4g78.rucdncomp.pro&path=%2Fuseraction%2Fevents%2Fb892639b7195%2F&security=tls&sni=z1q3pv4g78.rucdncomp.pro&type=ws#%F0%9F%87%A9%F0%9F%87%AA%20Germany%20%E2%80%94%20%23101
+vless://54f22246-cc9c-4315-907a-6c94c901d20f@82.202.179.106:11443?encryption=none&flow=xtls-rprx-vision&fp=firefox&pbk=WWmwRoB2K7xonT6jzbhKen_Rp-UM7QCr_vMgmNZuggc&security=reality&sid=044a5e06faf5&sni=smartcaptcha.yandexcloud.net&type=raw#%F0%9F%87%AB%F0%9F%87%B7%20France%20%E2%80%94%20%23106
+vless://1ba0439d-384c-4a6e-9560-0439698beb2a@82.202.179.111:15443?encryption=none&flow=xtls-rprx-vision&fp=firefox&pbk=MNmqM2p3nUYZIqo0sTMXRXGzB5HquF-czSycvdqn3U4&security=reality&sid=b74f54b7&sni=smartcaptcha.yandexcloud.net&type=raw#%F0%9F%87%AB%F0%9F%87%B7%20France%20%E2%80%94%20%23107
+http://217.25.228.102:8888#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-151
+vless://1ba0439d-384c-4a6e-9560-0439698beb2a@82.202.182.42:3443?security=reality&encryption=none&pbk=YIXOvwrCFxQYKOP_GwdhbzZLlwgBIVVISXDpFZQBt0c&headerType=none&fp=firefox&type=tcp&flow=xtls-rprx-vision&sni=smartcaptcha.yandexcloud.net&sid=a5bb22e6a41ff20a#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-284
+http://158.160.234.55:1080#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-298
+socks5://91.243.98.96:2080#%5BRunDun%5D%20%F0%9F%87%B7%F0%9F%87%BARU-355
